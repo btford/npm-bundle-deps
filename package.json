@@ -18,6 +18,8 @@
     "mkdirp": "^0.5.0",
     "checksum": "^0.1.1",
     "routes-router": "^1.5.4",
-    "filed": "^0.1.0"
+    "filed": "^0.1.0",
+    "lrutrack": "^0.1.0",
+    "minimist": "^0.1.0"
   }
 }
