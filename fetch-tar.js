@@ -32,7 +32,7 @@ module.exports = function (repo, sha, cb) {
     // i regret nothing
     var semaphore = 2;
     function V (err, data) {
-      --semaphore && (log('got both files'), cb(err, data));
+      !(--semaphore) && (log('got both files'), cb(err, data));
     }
   }
 
