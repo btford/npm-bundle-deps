@@ -6,5 +6,10 @@
 4. serves it
 
 
+## See Also
+
+* [module-foundry](https://github.com/nodejitsu/module-foundry)
+
+
 ## License
 MIT
