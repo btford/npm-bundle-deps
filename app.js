@@ -1,12 +1,12 @@
 // based on https://github.com/Raynos/http-framework
 
 var http      = require('http');
-var fs        = require('fs');
 var Router    = require('routes-router');
 var sendFile  = require('./send-file');
 var fetchTar  = require('./fetch-tar');
 var Cache     = require('./lib/cache');
 var log       = require('./lib/log');
+var rimraf    = require('rimraf');
 
 var argv  = require('minimist')(process.argv.slice(2));
 var app   = Router();
@@ -23,8 +23,8 @@ if(argv.debug) {
   app.addRoute('/debug*?', require('./debug-router.js'));
 
   if (typeof argv.debug !== 'string' || argv.debug.indexOf('keep-files') === -1) {
-    if (fs.existsSync('./temp')) fs.unlinkSync('./temp');
-    if (fs.existsSync('./files')) fs.unlinkSync('./files');
+    rimraf.sync('./temp');
+    rimraf.sync('./files');
   }
 }
 
