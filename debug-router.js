@@ -12,24 +12,26 @@ module.exports = debugRouter;
 debugRouter.addRoute('/', function (req, res) {
   var projects = {};
 
-  var users = fs.readdirSync('./temp');
-  users.forEach(function (user) {
-    var repos = fs.readdirSync(path.join('./temp', user));
-    repos.forEach(function (repo) {
-      var userRepo = projects[user + '/' + repo] = {};
-      var shas = fs.readdirSync(path.join('./temp', user, repo));
-      shas.forEach(function (sha) {
-        var packageJson = {};
-        try {
-          packageJson = JSON.parse(fs.readFileSync(path.join('./temp', user, repo, sha, 'package.json'), {encoding: 'utf-8'}));
-        } catch (e) {
-          packageJson.error = e.toString();
-        } finally {
-          userRepo['<a href=' + path.join('/debug', user, repo, sha) + '>' + sha + '</a>'] = packageJson;
-        }
+  if (fs.readdirSync('./temp')) {
+    var users = fs.readdirSync('./temp');
+    users.forEach(function (user) {
+      var repos = fs.readdirSync(path.join('./temp', user));
+      repos.forEach(function (repo) {
+        var userRepo = projects[user + '/' + repo] = {};
+        var shas = fs.readdirSync(path.join('./temp', user, repo));
+        shas.forEach(function (sha) {
+          var packageJson = {};
+          try {
+            packageJson = JSON.parse(fs.readFileSync(path.join('./temp', user, repo, sha, 'package.json'), {encoding: 'utf-8'}));
+          } catch (e) {
+            packageJson.error = e.toString();
+          } finally {
+            userRepo['<a href=' + path.join('/debug', user, repo, sha) + '>' + sha + '</a>'] = packageJson;
+          }
+        });
       });
     });
-  });
+  }
 
   res.end('<pre>' + JSON.stringify(projects, null, '  ') + '</pre>');
 
