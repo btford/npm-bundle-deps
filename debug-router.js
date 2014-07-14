@@ -12,7 +12,7 @@ module.exports = debugRouter;
 debugRouter.addRoute('/', function (req, res) {
   var projects = {};
 
-  if (fs.readdirSync('./temp')) {
+  if (fs.existsSync('./temp')) {
     var users = fs.readdirSync('./temp');
     users.forEach(function (user) {
       var repos = fs.readdirSync(path.join('./temp', user));
