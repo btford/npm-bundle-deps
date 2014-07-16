@@ -7,6 +7,7 @@ var fetchTar  = require('./fetch-tar');
 var Cache     = require('./lib/cache');
 var log       = require('./lib/log');
 var rimraf    = require('rimraf');
+var cp        = require('child_process');
 
 var argv  = require('minimist')(process.argv.slice(2));
 var app   = Router();
@@ -26,11 +27,13 @@ if(argv.debug) {
     rimraf.sync('./temp');
     rimraf.sync('./files');
   }
+
+  cp.spawn('node', ['node_modules/.bin/http-server', '.']);
 }
 
 app.addRoute('/fetch-tar/:user/:repo/:sha', function (req, res, opts, cb) {
   var repo = opts.user + '/' + opts.repo;
-  var sha = opts.sha;
+  var sha = opts.sha;ds
   log('requested ' + repo + ' @ ' + sha);
   fetchTar(repo, sha, function (path) {
     cache.set(path);

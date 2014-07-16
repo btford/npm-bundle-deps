@@ -16,6 +16,7 @@
   "dependencies": {
     "checksum": "^0.1.1",
     "filed": "^0.1.0",
+    "http-server": "^0.6.1",
     "lrutrack": "^0.1.0",
     "minimist": "^0.1.0",
     "mkdirp": "^0.5.0",
