@@ -21,11 +21,9 @@ log.prefix(function () {
 });
 
 if(argv.debug) {
-  //app.addRoute('/debug*?', require('./debug-router.js'));
 
   if (typeof argv.debug !== 'string' || argv.debug.indexOf('keep-files') === -1) {
     rimraf.sync('./temp');
-    //rimraf.sync('./files');
   }
 
   cp.spawn('node', ['node_modules/.bin/http-server', '.']);

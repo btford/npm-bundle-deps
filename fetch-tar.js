@@ -72,7 +72,7 @@ function downloadDependencyFiles(commitPath) {
       })
     ).spread(
       function (packageJson, shrinkwrap) {
-        log(commitPath + ' downloaded both dependency files')
+        log(commitPath + ' downloaded both dependency files');
 
         var sum = checksum(shrinkwrap);
         var tarDir = path.join('temp', 'data', sum);
@@ -83,6 +83,8 @@ function downloadDependencyFiles(commitPath) {
           fs.writeFileSync(path.join(tarDir, PACKAGE_FILES[0]), packageJson);
           fs.writeFileSync(path.join(tarDir, PACKAGE_FILES[1]), shrinkwrap);
           log(tarDir + ' now has both dependency files');
+        } else {
+          log(commitPath + ' checksum says we already have downloaded these dependencies. Sum: ' + sum);
         }
 
         log('Symlinking ' + commitDir + ' to ' + tarDir);
