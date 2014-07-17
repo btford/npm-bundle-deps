@@ -21,24 +21,33 @@ log.prefix(function () {
 });
 
 if(argv.debug) {
-  app.addRoute('/debug*?', require('./debug-router.js'));
+  //app.addRoute('/debug*?', require('./debug-router.js'));
 
   if (typeof argv.debug !== 'string' || argv.debug.indexOf('keep-files') === -1) {
     rimraf.sync('./temp');
-    rimraf.sync('./files');
+    //rimraf.sync('./files');
   }
 
   cp.spawn('node', ['node_modules/.bin/http-server', '.']);
 }
 
-app.addRoute('/fetch-tar/:user/:repo/:sha', function (req, res, opts, cb) {
-  var repo = opts.user + '/' + opts.repo;
-  var sha = opts.sha;ds
-  log('requested ' + repo + ' @ ' + sha);
-  fetchTar(repo, sha, function (path) {
-    cache.set(path);
-    log('sending ' + path);
-    sendFile(req, res, path, cb);
+app.addRoute('/tar/:user/:repo/:sha', function (req, res, opts, cb) {
+  log('requested ' + opts.user + '/' + opts.repo + ' @ ' + opts.sha);
+
+  fetchTar(opts.user + '/' + opts.repo + '/' + opts.sha).then(function (tarPath) {
+    //cache.set(tarPath);
+
+    log('sending ' + tarPath);
+    sendFile(tarPath).then(function (stream) {
+      log('streaming ' + tarPath);
+      res.setHeader('Content-Disposition', 'attachment; filename="node_modules.tar.gz"');
+      stream.pipe(res).on('finish', function () {
+        log('done stream' + tarPath);
+      });
+    }, function () {
+      res.statusCode = 500;
+      res.end();
+    });
   });
 });
 
