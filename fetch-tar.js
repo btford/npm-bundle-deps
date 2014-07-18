@@ -7,6 +7,7 @@ var request    = require('request');
 var Q          = require('q');
 var log        = require('./lib/log');
 var npmInstall = require('./lib/npm-install');
+var cache      = require('./lib/cache.js');
 
 var currentFetchingTars = {};
 
@@ -35,6 +36,7 @@ module.exports = function (commitPath) {
         npmInstall(tarDir).then(function () {
           log(tarDir + ' npm installed. Generating Tar');
           generateTarFile(tarDir).then(function () {
+            var tarPath = path.join(tarDir, 'node_modules.tar.gz');
             log(tarPath + ' generated, sending that');
             resolve(tarPath);
           }, reject)
@@ -121,6 +123,7 @@ function generateTarFile(tarDir) {
         } else {
           log(tarDir + ' tar successfully generated');
           resolve(stdout);
+          //cache.cleanup();
         }
       });
   });
