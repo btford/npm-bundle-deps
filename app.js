@@ -38,7 +38,10 @@ app.addRoute('/tar/:user/:repo/:sha', function (req, res, opts, cb) {
     sendFile(tarPath).then(function (stream) {
       log('streaming ' + tarPath);
       res.setHeader('Content-Disposition', 'attachment; filename="node_modules.tar.gz"');
-      stream.pipe(res).on('finish', function () {
+      stream.pipe(res).on('error', function (err) {
+        log('error streaming');
+        log(err);
+      }).on('finish', function () {
         log('finished streaming ' + tarPath);
       });
     }, function () {
